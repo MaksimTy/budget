@@ -52,7 +52,6 @@ export default {
         id: String(Math.random())
         };
       this.$set(this.list, newObject.id, newObject);
-      console.log(this);
     },
   },
 };

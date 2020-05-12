@@ -12,6 +12,7 @@ import {
   Option,
   Alert
 } from "element-ui";
+import {numberFormat} from "../../utils/formatter";
 
 const elements = [Button, Card, Form, FormItem, Input, Select, Option, Alert];
 

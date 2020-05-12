@@ -43,10 +43,20 @@ export default {
     onSubmit() {
      this.$refs.addItemForm.validate((valid) => {
        if(valid){
-         this.$emit('submitForm', {...this.formData});
+         const transaction = {...this.formData};
+         this.checkTransaction(transaction);
+         this.$emit('submitForm', transaction);
          this.$refs.addItemForm.resetFields();
        }
      });
+    },
+    checkTransaction (transaction) {
+      if(transaction.type === 'INCOME'){
+        transaction.value = Math.abs(transaction.value);
+      }
+       if(transaction.type === 'OUTCOME'){
+        transaction.value = -Math.abs(transaction.value);
+      }
     },
   },
 

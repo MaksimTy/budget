@@ -1,24 +1,34 @@
+
+
+
 <template>
   <div class="total-value"> Balance:
     <template v-if="total > 0">
-    <span class="positive-balance">{{ total }}</span>
+    <span class="positive-balance">{{ getTotal }}</span>
     </template>
     <template v-else-if="total < 0">
-      <span class="negative-balance">{{ total }}</span>
+      <span class="negative-balance">{{ getTotal }}</span>
     </template>
     <template v-else>
-      <span class="zero-balance">{{ total }}</span>
+      <span class="zero-balance">{{ getTotal }}</span>
     </template>
     </div>
 </template>
 
 <script>
+import {numberFormat} from "../utils/formatter";
+
 export default {
   name: 'TotalBalance',
   props:{
     total: {
       type: Number,
       default: 0,
+    },
+  },
+  computed: {
+    getTotal() {
+      return numberFormat(this.total);
     },
   },
 
