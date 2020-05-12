@@ -2,7 +2,7 @@
 node_modules
 /dist
 package-lock.json
-Task.md
+Tasks.md
 
 # local env files
 .env.local
