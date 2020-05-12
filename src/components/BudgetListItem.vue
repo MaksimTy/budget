@@ -6,14 +6,34 @@
       type="danger"
       icon="el-icon-delete"
       circle size="mini"
-      @click="onDeleteItem(item.id)">
+      @click="dialogVisible = true">
       </el-button>
+        <el-dialog
+          class="dialog-question"
+          title="Are you sure?"
+          :visible.sync="dialogVisible"
+          width="15%"
+          :before-close="handleClose"
+          :show-close="false"
+          :center="true">
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisible = false">Cancel</el-button>
+            <el-button type="danger" @click="onDeleteItem(item.id)">Delete</el-button>
+          </span>
+        </el-dialog>
   </div>
 </template>
+
 <script>
 import {numberFormat} from "../utils/formatter.js";
+
 export default {
   name: 'BudgetListItem',
+  data() {
+      return {
+        dialogVisible: false
+      };
+    },
   props: {
     item: {
       type: Object,
@@ -30,6 +50,13 @@ export default {
     onDeleteItem(id) {
       this.$emit('onDeleteItem', id);
     },
+          handleClose(done) {
+        this.$confirm('Are you sure to close this dialog?')
+          .then(() => {
+            done();
+          })
+          .catch(() => {});
+      },
   },
 }
 </script>
@@ -46,6 +73,10 @@ export default {
   font-weight: bold;
   margin-left: auto;
   margin-right: 20px;
+}
+
+.dialog-question{
+  font-weight: bold;
 }
 
 </style>
