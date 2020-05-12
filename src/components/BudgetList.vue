@@ -2,16 +2,9 @@
   <div class="budget-list-wrap">
     <el-card :header="header">
       <template v-if="isEmpty">
-    <div class="list-item" v-for="(item, prop) in list" :key="prop">
-      <span class="budget-comment">{{item.comment}}</span>
-      <span class="budget-value">{{item.value}}</span>
-      <el-button
-      type="danger"
-      icon="el-icon-delete"
-      circle size="mini"
-      @click="onDeleteItem(item.id)">
-      </el-button>
-    </div>
+        <div v-for="(item, prop) in list" :key="prop">
+          <BudgetListItem :item="item" @onDeleteItem="onDeleteItem"/>
+      </div>
     </template>
     <el-alert v-else
       :title="emptyTitle"
@@ -23,8 +16,13 @@
 </template>
 
 <script>
+import BudgetListItem from "./BudgetListItem.vue";
+
 export default {
   name: "BudgetList",
+  components: {
+    BudgetListItem,
+    },
   props: {
     list: {
       type: Object,
@@ -40,7 +38,7 @@ export default {
       return Boolean(Object.keys(this.list).length);
     },
   },
-  methods: {
+   methods: {
     onDeleteItem(id) {
       this.$emit('onDeleteItem', id);
     },
@@ -49,21 +47,10 @@ export default {
 </script>
 
 <style scoped>
+
 .budget-list-wrap {
   max-width: 500px;
   margin: auto;
-}
-
-.list-item {
-  display: flex;
-  align-items: center;
-  padding: 10px 15px;
-}
-
-.budget-value {
-  font-weight: bold;
-  margin-left: auto;
-  margin-right: 20px;
 }
 
 </style>
