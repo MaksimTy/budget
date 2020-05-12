@@ -1,7 +1,15 @@
 <template>
   <div class="list-item">
       <span class="budget-comment">{{item.comment}}</span>
-      <span class="budget-value">{{getValue}}</span>
+      <template v-if="getValue > 0">
+          <span class="budget-value positive">{{getValue}}</span>
+          <i class="el-icon-caret-top icon positive"></i>
+        </template>
+      <template v-else>
+         <span class="budget-value negative">{{getValue}}</span>
+         <i class="el-icon-caret-bottom icon negative"></i>
+      </template>
+
       <el-button
       type="danger"
       icon="el-icon-delete"
@@ -72,11 +80,22 @@ export default {
 .budget-value {
   font-weight: bold;
   margin-left: auto;
+ margin-right: 20px;
+}
+.icon{
   margin-right: 20px;
 }
 
 .dialog-question{
   font-weight: bold;
+}
+
+.positive{
+  color: #67C23A;
+}
+
+.negative{
+  color: #F56C6C;
 }
 
 </style>
