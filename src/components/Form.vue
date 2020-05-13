@@ -35,10 +35,18 @@ export default {
       ],
     value: [
       {required: true, message: 'Pleace input value.', trigger: 'blur'},
-      {type: 'number', message: 'Value must be a number.', trigger: 'chunger'}
+      {type: 'number', message: 'Value must be a number.', trigger: 'chunger'},
+      {validator: (rule, value, callback) => {
+        if(value !== 0){
+          callback();
+        } else {
+          callback('Zero is not acceptable');
+        }
+       }, trigger: 'blur'}
       ],
-  },
+    },
   }),
+
   methods: {
     onSubmit() {
      this.$refs.addItemForm.validate((valid) => {
@@ -59,15 +67,13 @@ export default {
       }
     },
   },
-
-
 };
 
 </script>
 
 <style scoped>
 .form-card{
-  
+
   margin: auto;
 }
 
