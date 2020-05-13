@@ -1,7 +1,7 @@
 <template>
   <div class="list-item">
       <span class="budget-comment">{{item.comment}}</span>
-      <template v-if="getValue > 0">
+      <template v-if="item.value > 0">
           <span class="budget-value positive">{{getValue}}</span>
           <i class="el-icon-caret-top icon positive"></i>
         </template>
@@ -20,7 +20,7 @@
           class="dialog-question"
           title="Are you sure?"
           :visible.sync="dialogVisible"
-          width="15%"
+           width="300px"
           :before-close="handleClose"
           :show-close="false"
           :center="true">
@@ -80,7 +80,7 @@ export default {
 .budget-value {
   font-weight: bold;
   margin-left: auto;
- margin-right: 20px;
+  margin-right: 20px;
 }
 .icon{
   margin-right: 20px;

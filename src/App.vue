@@ -1,8 +1,18 @@
 <template>
   <div id="app">
-    <Form @submitForm="onSubmitForm"/>
-    <TotalBalance :total="TotalBalance"/>
-    <BudgetList :list="list" @onDeleteItem="onDeleteItem"/>
+      <el-row :gutter="5">
+        <el-col :xs="24" :sm="20" :md="16" :lg="8" :xl="4">
+         <Form @submitForm="onSubmitForm"/>
+        </el-col>
+        <el-col :xs="24" :sm="20" :md="16" :lg="16" :xl="20">
+          <TotalBalance :total="TotalBalance"/>
+          <BudgetList :fList="FilteredList"
+            @onDeleteItem="onDeleteItem"
+            @onListShow="onListShow"
+
+          />
+        </el-col>
+      </el-row>
   </div>
 </template>
 
@@ -33,6 +43,7 @@ export default {
         id: 2,
       },
     },
+    fList: null,
   }),
   computed:{
     TotalBalance() {
@@ -41,17 +52,48 @@ export default {
         return acc;
       }, 0);
     },
+    FilteredList() {
+      if(!this.fList){
+        return this.list
+        }
+        return this.fList;
+    },
   },
   methods: {
     onDeleteItem(id) {
       this.$delete(this.list, id);
+      this.onListShow();
+
     },
+    onListShow(param) {
+
+      if(param === 1){
+        this.fList = Object.values(this.list)
+        .filter(item => item.value > 0)
+        .reduce((acc, val) => {
+          acc[val.id] = val;
+          return acc;
+        },{});
+      } else if(param === -1) {
+       this.fList = Object.values(this.list)
+        .filter(item => item.value < 0)
+        .reduce((acc, val) => {
+          acc[val.id] = val;
+          return acc;
+        },{});
+      } else{
+        this.fList = this.list;
+      }
+
+    },
+
     onSubmitForm(data) {
       const newObject = {
         ...data,
         id: String(Math.random())
         };
       this.$set(this.list, newObject.id, newObject);
+      this.onListShow();
     },
   },
 };
@@ -66,4 +108,10 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+
+.container{
+  width: 100%;
+}
+
+
 </style>

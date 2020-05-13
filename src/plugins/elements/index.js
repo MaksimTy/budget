@@ -2,6 +2,7 @@ import Vue from "vue";
 import lang from "element-ui/lib/locale/lang/en";
 import locale from "element-ui/lib/locale";
 import "element-ui/packages/theme-chalk/lib/index.css";
+
 import {
   Button,
   Card,
@@ -11,10 +12,12 @@ import {
   Select,
   Option,
   Alert,
-  Dialog
+  Dialog,
+  Row,
+  Col,
 } from "element-ui";
 
-const elements = [Button, Card, Form, FormItem, Input, Select, Option, Alert, Dialog];
+const elements = [Button, Card, Form, FormItem, Input, Select, Option, Alert, Dialog, Row, Col];
 
 locale.use(lang);
 

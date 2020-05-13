@@ -67,7 +67,7 @@ export default {
 
 <style scoped>
 .form-card{
-  max-width: 500px;
+  
   margin: auto;
 }
 
