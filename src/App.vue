@@ -20,6 +20,8 @@
 import BudgetList from "@/components/BudgetList.vue";
 import TotalBalance from "@/components/TotalBalance.vue";
 import Form from "@/components/Form.vue"
+import { mapGetters } from "vuex";
+import { mapActions } from "vuex";
 
 export default {
   name: "App",
@@ -29,70 +31,63 @@ export default {
     Form,
     },
   data: () => ({
-    list: {
-       1:{
-        type: 'INCOME',
-        value: 100,
-        comment: 'comments',
-        id: 1,
-      },
-      2:{
-        type: 'OUTCOME',
-        value: -50,
-        comment: 'comments',
-        id: 2,
-      },
-    },
-    fList: null,
+      fList: null
   }),
   computed:{
-    TotalBalance() {
-      return Object.values(this.list).reduce((acc, val) => {
-        acc += val.value;
-        return acc;
-      }, 0);
-    },
+    ...mapGetters("transactions", ["TotalBalance", "transactionsList"]),
+
     FilteredList() {
       if(!this.fList){
-        return this.list
+        return this.transactionsList
+        .filter(item => item.value !== 0)
+        .reduce((acc, val) => {
+        acc[val.id] = val;
+         return acc;
+        },{});
         }
         return this.fList;
     },
   },
   methods: {
+    ...mapActions("transactions", ["addNewItem", "deleteItem"]),
+
     onDeleteItem(id) {
-      this.$delete(this.list, id);
+      this.deleteItem(id);
       this.onListShow();
-
     },
-    onListShow(param) {
 
+    onListShow(param) {
       if(param === 1){
-        this.fList = Object.values(this.list)
+        this.fList = this.transactionsList
         .filter(item => item.value > 0)
         .reduce((acc, val) => {
           acc[val.id] = val;
           return acc;
         },{});
       } else if(param === -1) {
-       this.fList = Object.values(this.list)
+        this.fList = this.transactionsList
         .filter(item => item.value < 0)
         .reduce((acc, val) => {
           acc[val.id] = val;
           return acc;
         },{});
       } else{
-        this.fList = this.list;
-      }
+        this.fList = this.transactionsList
+        .filter(item => item.value !== 0)
+        .reduce((acc, val) => {
+        acc[val.id] = val;
+         return acc;
+        },{});
 
+      }
     },
 
     onSubmitForm(data) {
       const newObject = {
         ...data,
-        id: String(Math.random())
+        id: String(new Date().valueOf())
         };
-      this.$set(this.list, newObject.id, newObject);
+      this.addNewItem(newObject);
       this.onListShow();
     },
   },

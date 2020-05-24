@@ -29,6 +29,7 @@
 <script>
 import BudgetListItem from "./BudgetListItem.vue";
 
+
 export default {
   name: "BudgetList",
   components: {
