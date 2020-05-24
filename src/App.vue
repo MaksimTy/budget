@@ -1,25 +1,25 @@
 <template>
   <div id="app">
-      <el-row :gutter="5">
-        <el-col :xs="24" :sm="20" :md="16" :lg="8" :xl="4">
-         <Form @submitForm="onSubmitForm"/>
-        </el-col>
-        <el-col :xs="24" :sm="20" :md="16" :lg="16" :xl="20">
-          <TotalBalance :total="TotalBalance"/>
-          <BudgetList :fList="FilteredList"
-            @onDeleteItem="onDeleteItem"
-            @onListShow="onListShow"
-
-          />
-        </el-col>
-      </el-row>
+    <el-row :gutter="5">
+      <el-col :xs="24" :sm="20" :md="16" :lg="8" :xl="4">
+        <Form @submitForm="onSubmitForm" />
+      </el-col>
+      <el-col :xs="24" :sm="20" :md="16" :lg="16" :xl="20">
+        <TotalBalance :total="TotalBalance" />
+        <BudgetList
+          :fList="FilteredList"
+          @onDeleteItem="onDeleteItem"
+          @onListShow="onListShow"
+        />
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
 import BudgetList from "@/components/BudgetList.vue";
 import TotalBalance from "@/components/TotalBalance.vue";
-import Form from "@/components/Form.vue"
+import Form from "@/components/Form.vue";
 import { mapGetters } from "vuex";
 import { mapActions } from "vuex";
 
@@ -29,23 +29,22 @@ export default {
     BudgetList,
     TotalBalance,
     Form,
-    },
+  },
   data: () => ({
-      fList: null
+    fList: null,
   }),
-  computed:{
-    ...mapGetters("transactions", ["TotalBalance", "transactionsList"]),
+  computed: {
+    ...mapGetters("transactions", [
+      "TotalBalance",
+      "transactionsList",
+      "filteredList",
+    ]),
 
-    FilteredList() {
-      if(!this.fList){
-        return this.transactionsList
-        .filter(item => item.value !== 0)
-        .reduce((acc, val) => {
-        acc[val.id] = val;
-         return acc;
-        },{});
-        }
-        return this.fList;
+    FilteredList(param) {
+      if (!this.fList) {
+        return this.filteredList(param);
+      }
+      return this.fList;
     },
   },
   methods: {
@@ -57,36 +56,14 @@ export default {
     },
 
     onListShow(param) {
-      if(param === 1){
-        this.fList = this.transactionsList
-        .filter(item => item.value > 0)
-        .reduce((acc, val) => {
-          acc[val.id] = val;
-          return acc;
-        },{});
-      } else if(param === -1) {
-        this.fList = this.transactionsList
-        .filter(item => item.value < 0)
-        .reduce((acc, val) => {
-          acc[val.id] = val;
-          return acc;
-        },{});
-      } else{
-        this.fList = this.transactionsList
-        .filter(item => item.value !== 0)
-        .reduce((acc, val) => {
-        acc[val.id] = val;
-         return acc;
-        },{});
-
-      }
+      this.fList = this.filteredList(param);
     },
 
     onSubmitForm(data) {
       const newObject = {
         ...data,
-        id: String(new Date().valueOf())
-        };
+        id: String(new Date().valueOf()),
+      };
       this.addNewItem(newObject);
       this.onListShow();
     },
@@ -104,9 +81,7 @@ export default {
   margin-top: 60px;
 }
 
-.container{
+.container {
   width: 100%;
 }
-
-
 </style>
